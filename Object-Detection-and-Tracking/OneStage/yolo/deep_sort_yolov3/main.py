@@ -19,6 +19,7 @@ from tools import generate_detections as gdet
 from deep_sort.detection import Detection as ddet
 from collections import deque
 from keras import backend
+from tqdm import tqdm
 
 backend.clear_session()
 ap = argparse.ArgumentParser()
@@ -53,6 +54,9 @@ def main(yolo):
     writeVideo_flag = True
     #video_path = "../../yolo_dataset/t1_video/test_video/det_t1_video_00025_test.avi"
     video_capture = cv2.VideoCapture(args["input"])
+    #総フレーム数
+    vframe_cnt = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
+    pbar = tqdm(total=vframe_cnt) #進捗バー用
 
     if writeVideo_flag:
     # Define the codec and create VideoWriter object
@@ -148,11 +152,14 @@ def main(yolo):
         fps  = ( fps + (1./(time.time()-t1)) ) / 2
         #print(set(counter))
 
+        pbar.update(1) #進捗アップデート
+
         # Press Q to stop!
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     print(" ")
     print("[Finish]")
+    pbar.close()
     end = time.time()
 
     if len(pts[track.track_id]) != None:
