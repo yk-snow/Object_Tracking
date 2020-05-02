@@ -132,9 +132,9 @@ def main(yolo):
         cv2.putText(frame, "Total Object Counter: "+str(count),(int(20), int(120)),0, 5e-3 * 200, (0,255,0),2)
         cv2.putText(frame, "Current Object Counter: "+str(i),(int(20), int(80)),0, 5e-3 * 200, (0,255,0),2)
         cv2.putText(frame, "FPS: %f"%(fps),(int(20), int(40)),0, 5e-3 * 200, (0,255,0),3)
-        cv2.namedWindow("YOLO3_Deep_SORT", 0);
-        cv2.resizeWindow('YOLO3_Deep_SORT', 1024, 768);
-        cv2.imshow('YOLO3_Deep_SORT', frame)
+        #cv2.namedWindow("YOLO3_Deep_SORT", 0);
+        #cv2.resizeWindow('YOLO3_Deep_SORT', 1024, 768);
+        #cv2.imshow('YOLO3_Deep_SORT', frame)
 
         if writeVideo_flag:
             #save a frame
