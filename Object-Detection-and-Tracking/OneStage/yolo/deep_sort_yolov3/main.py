@@ -170,7 +170,7 @@ def main(yolo):
     pbar.close()
     end = time.time()
     import pickle
-    f = open(‘sample.binaryfile’,’wb’)
+    f = open('sample.binaryfile','wb')
     pickle.dump(ID_pos,f)
     f.close
     if len(pts[track.track_id]) != None:
