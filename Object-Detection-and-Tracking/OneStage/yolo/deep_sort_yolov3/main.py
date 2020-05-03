@@ -29,7 +29,7 @@ args = vars(ap.parse_args())
 
 pts = [deque(maxlen=30) for _ in range(9999)]
 ID_pos = [[] for _ in range(9999)]
-frame_cnt = 0
+
 warnings.filterwarnings('ignore')
 
 # initialize a list of colors to represent each possible class label
@@ -59,7 +59,7 @@ def main(yolo):
     #総フレーム数
     vframe_cnt = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
     pbar = tqdm(total=vframe_cnt) #進捗バー用
-
+    frame_cnt = 0
     if writeVideo_flag:
     # Define the codec and create VideoWriter object
         w = int(video_capture.get(3))
@@ -98,9 +98,9 @@ def main(yolo):
         indexIDs = []
         c = []
         boxes = []
-        for det in detections:
-            bbox = det.to_tlbr()
-            cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 2)
+        #for det in detections:
+        #    bbox = det.to_tlbr()
+        #    cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 2)
 
         for track in tracker.tracks:
             if not track.is_confirmed() or track.time_since_update > 1:
@@ -128,9 +128,12 @@ def main(yolo):
             #center point
             cv2.circle(frame,  (center), 1, color, thickness)
 
-            frame_ = frame[bbox[1]:bbox[3] ,bbox[0]:bbox[2] ]
-            fname = 'output/' + 'bbox' + str(frame_cnt) + '_' + str(track.track_id) + '.jpg'
-            cv2.imwrite(fname, frame_)
+            frame_ = frame[int(bbox[1]):int(bbox[3]),int(bbox[0]):int(bbox[2])]
+            height, width, channels = frame_.shape[:3]
+            if height > 10 and width > 10:
+            #fname = '/content/drive/My Drive/output/' + 'tracking_frame' + str(frame_cnt) + '_ID' + str(track.track_id) + '.jpg'
+              fname = '/content/drive/My Drive/output/' + 'tracking_ID' + str(track.track_id) + '_Frame' + str(frame_cnt) + '.jpg'
+              cv2.imwrite(fname, frame_)
 
 	    #draw motion path
             for j in range(1, len(pts[track.track_id])):
