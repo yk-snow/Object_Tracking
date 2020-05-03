@@ -28,6 +28,8 @@ ap.add_argument("-c", "--class",help="name of class", default = "person")
 args = vars(ap.parse_args())
 
 pts = [deque(maxlen=30) for _ in range(9999)]
+ID_pos = [[] for _ in range(9999)]
+frame_cnt = 0
 warnings.filterwarnings('ignore')
 
 # initialize a list of colors to represent each possible class label
@@ -120,6 +122,8 @@ def main(yolo):
             center = (int(((bbox[0])+(bbox[2]))/2),int(((bbox[1])+(bbox[3]))/2))
             #track_id[center]
             pts[track.track_id].append(center)
+            f_pos = (frame_cnt,bbox[0],bbox[1],bbox[2],bbox[3]) 
+            ID_pos[track.track_id].append(f_pos)
             thickness = 5
             #center point
             cv2.circle(frame,  (center), 1, color, thickness)
@@ -151,7 +155,7 @@ def main(yolo):
             list_file.write('\n')
         fps  = ( fps + (1./(time.time()-t1)) ) / 2
         #print(set(counter))
-
+        frame_cnt += 1
         pbar.update(1) #進捗アップデート
 
         # Press Q to stop!
@@ -161,7 +165,10 @@ def main(yolo):
     print("[Finish]")
     pbar.close()
     end = time.time()
-
+    import pickle
+    f = open(‘sample.binaryfile’,’wb’)
+    pickle.dump(ID_pos,f)
+    f.close
     if len(pts[track.track_id]) != None:
        print(args["input"][43:57]+": "+ str(count) + " " + str(class_name) +' Found')
 
