@@ -128,6 +128,10 @@ def main(yolo):
             #center point
             cv2.circle(frame,  (center), 1, color, thickness)
 
+            frame_ = frame[bbox[1]:bbox[3] ,bbox[0]:bbox[2] ]
+            fname = 'output/' + 'bbox' + str(frame_cnt) + '_' + str(track.track_id) + '.jpg'
+            cv2.imwrite(fname, frame_)
+
 	    #draw motion path
             for j in range(1, len(pts[track.track_id])):
                 if pts[track.track_id][j - 1] is None or pts[track.track_id][j] is None:
